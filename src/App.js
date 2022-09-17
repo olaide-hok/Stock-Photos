@@ -6,6 +6,25 @@ const mainUrl = `https://api.unsplash.com/photos/`
 const searchUrl = `https://api.unsplash.com/search/photos/`
 
 function App() {
+  const [loading, setLoading] = useState(false)
+  const [photos, setPhotos] = useState([])
+
+  const fetchImages = async () => {
+    setLoading(true)
+    let url
+    url = `${mainUrl}?client_id=w5JU4CrsRYhINq_fsL8d4dZ0c6W3VWTG2e2gQ2XNs2o`
+
+    try {
+      const response = await fetch(url)
+      const data = await response.json()
+    } catch (error) {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchImages()
+  }, [])
   return <h2>stock photos starter</h2>
 }
 
