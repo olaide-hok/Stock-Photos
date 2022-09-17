@@ -29,6 +29,19 @@ function App() {
     fetchImages()
   }, [])
 
+  useEffect(() => {
+    const event= window.addEventListener('scroll', () => {
+      if (
+        !loading &&
+        window.innerHeight + window.scrollY >= document.body.scrollHeight - 2
+      ) {
+        console.log('the end');
+      }
+    })
+
+    return () => window.removeEventListener('scroll', event)
+  }, [])
+
   const handleSubmit = (e) => {
     e.preventDefault()
   }
