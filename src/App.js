@@ -8,20 +8,33 @@ const searchUrl = `https://api.unsplash.com/search/photos/`
 function App() {
   const [loading, setLoading] = useState(false)
   const [photos, setPhotos] = useState([])
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(0)
+  const [query, setQuery] = useState('')
 
 
   const fetchImages = async () => {
     setLoading(true)
     let url
     const urlPage = `&page=${page}`
-    url = `${mainUrl}${clientID}${urlPage}`
+    const urlQuery = `&query=${query}`
+
+    if (query) {
+      url = `${searchUrl}${clientID}${urlPage}${urlQuery}`
+    } else {
+      url = `${mainUrl}${clientID}${urlPage}`
+    }
 
     try {
       const response = await fetch(url)
       const data = await response.json()
       setPhotos((oldPhotos) => {
-        return [...oldPhotos, ...data]
+        if (query && page === 1) {
+          return data.results
+        } else if (query) {
+          return [...oldPhotos, ...data.results]
+        } else {
+          return [...oldPhotos, ...data]
+        }
       })
       setLoading(false)
 
@@ -50,13 +63,17 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    setPage(1)
   }
 
   return (
     <main>
       <section className="search">
         <form className="search-form">
-          <input type="text" className="form-input" />
+          <input type="text" className="form-input" 
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
           <button className="submit-btn"
             onClick={handleSubmit}
           >
