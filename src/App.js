@@ -28,8 +28,6 @@ function App() {
     try {
       const response = await fetch(url)
       const data = await response.json()
-      console.log(data)
-      console.log(data.results);
       setPhotos((oldPhotos) => {
         if (query && page === 1) {
           return data.results
